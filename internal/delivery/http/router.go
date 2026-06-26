@@ -7,10 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"mns/backend/internal/delivery/http/handler"
-	"mns/backend/internal/delivery/http/middleware"
-	"mns/backend/internal/usecase"
-	"mns/backend/pkg/access"
+	"authkit/internal/delivery/http/handler"
+	"authkit/internal/delivery/http/middleware"
+	"authkit/internal/usecase"
+	"authkit/pkg/access"
 )
 
 // Deps holds everything the router needs to register routes.

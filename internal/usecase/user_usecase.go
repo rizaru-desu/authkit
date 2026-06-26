@@ -5,8 +5,8 @@ import (
 	"context"
 	"fmt"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/domain/repository"
+	"authkit/internal/domain/entity"
+	"authkit/internal/domain/repository"
 )
 
 // UserUsecase handles user read/management operations. Registration lives in

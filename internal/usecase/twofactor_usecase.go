@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/domain/repository"
-	"mns/backend/pkg/id"
-	"mns/backend/pkg/secure"
-	"mns/backend/pkg/totp"
+	"authkit/internal/domain/entity"
+	"authkit/internal/domain/repository"
+	"authkit/pkg/id"
+	"authkit/pkg/secure"
+	"authkit/pkg/totp"
 )
 
 const backupCodeCount = 10

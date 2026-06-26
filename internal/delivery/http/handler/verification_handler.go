@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/usecase"
-	"mns/backend/pkg/response"
+	"authkit/internal/domain/entity"
+	"authkit/internal/usecase"
+	"authkit/pkg/response"
 )
 
 // VerificationHandler handles email verification and password reset endpoints.

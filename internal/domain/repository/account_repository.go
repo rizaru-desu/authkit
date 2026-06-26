@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"mns/backend/internal/domain/entity"
+	"authkit/internal/domain/entity"
 )
 
 // AccountRepository defines persistence operations for the `accounts` table.

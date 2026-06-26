@@ -8,7 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"mns/backend/pkg/config"
+	"authkit/pkg/config"
 )
 
 // NewPostgresPool creates a pgx connection pool from config.

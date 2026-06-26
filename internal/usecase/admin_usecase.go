@@ -8,11 +8,11 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/domain/repository"
-	"mns/backend/pkg/access"
-	"mns/backend/pkg/id"
-	"mns/backend/pkg/secure"
+	"authkit/internal/domain/entity"
+	"authkit/internal/domain/repository"
+	"authkit/pkg/access"
+	"authkit/pkg/id"
+	"authkit/pkg/secure"
 )
 
 // impersonationDuration matches Better Auth's default impersonationSessionDuration.

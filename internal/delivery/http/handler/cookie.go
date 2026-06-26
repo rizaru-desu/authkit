@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/pkg/config"
+	"authkit/pkg/config"
 )
 
 // writeSessionCookie sets the session token as an httpOnly cookie. When

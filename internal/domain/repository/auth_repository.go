@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"mns/backend/internal/domain/entity"
+	"authkit/internal/domain/entity"
 )
 
 // AuthRepository groups atomic auth writes that must span multiple tables.

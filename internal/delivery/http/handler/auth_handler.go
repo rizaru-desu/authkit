@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/internal/delivery/http/middleware"
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/usecase"
-	"mns/backend/pkg/config"
+	"authkit/internal/delivery/http/middleware"
+	"authkit/internal/domain/entity"
+	"authkit/internal/usecase"
+	"authkit/pkg/config"
 )
 
 // AuthHandler handles Better Auth-style sign-up / sign-in / sign-out endpoints.

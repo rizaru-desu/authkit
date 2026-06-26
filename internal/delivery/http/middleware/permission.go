@@ -3,8 +3,8 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/pkg/access"
-	"mns/backend/pkg/response"
+	"authkit/pkg/access"
+	"authkit/pkg/response"
 )
 
 // RequirePermission allows the request only if the current user's role is

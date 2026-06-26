@@ -3,9 +3,9 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/internal/delivery/http/middleware"
-	"mns/backend/internal/usecase"
-	"mns/backend/pkg/response"
+	"authkit/internal/delivery/http/middleware"
+	"authkit/internal/usecase"
+	"authkit/pkg/response"
 )
 
 // TwoFactorHandler handles 2FA enrolment endpoints (all require auth).

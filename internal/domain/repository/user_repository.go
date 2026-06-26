@@ -6,7 +6,7 @@ import (
 	"context"
 	"time"
 
-	"mns/backend/internal/domain/entity"
+	"authkit/internal/domain/entity"
 )
 
 // UserRepository defines persistence operations for the `users` table.

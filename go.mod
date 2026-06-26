@@ -1,4 +1,4 @@
-module mns/backend
+module authkit
 
 go 1.25.1
 

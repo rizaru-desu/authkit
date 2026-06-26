@@ -13,16 +13,16 @@ import (
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 
-	deliveryHTTP "mns/backend/internal/delivery/http"
-	"mns/backend/internal/delivery/http/handler"
-	"mns/backend/internal/delivery/http/middleware"
-	"mns/backend/internal/repository/postgres"
-	"mns/backend/internal/usecase"
-	"mns/backend/pkg/access"
-	"mns/backend/pkg/config"
-	"mns/backend/pkg/database"
-	"mns/backend/pkg/email"
-	"mns/backend/pkg/logger"
+	deliveryHTTP "authkit/internal/delivery/http"
+	"authkit/internal/delivery/http/handler"
+	"authkit/internal/delivery/http/middleware"
+	"authkit/internal/repository/postgres"
+	"authkit/internal/usecase"
+	"authkit/pkg/access"
+	"authkit/pkg/config"
+	"authkit/pkg/database"
+	"authkit/pkg/email"
+	"authkit/pkg/logger"
 )
 
 func main() {

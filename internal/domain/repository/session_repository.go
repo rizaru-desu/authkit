@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"mns/backend/internal/domain/entity"
+	"authkit/internal/domain/entity"
 )
 
 // SessionRepository defines persistence operations for the `sessions` table.

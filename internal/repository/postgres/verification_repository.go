@@ -8,8 +8,8 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/internal/repository/postgres/sqlc"
+	"authkit/internal/domain/entity"
+	"authkit/internal/repository/postgres/sqlc"
 )
 
 // VerificationRepository implements domain/repository.VerificationRepository.

@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mns/backend/internal/domain/entity"
-	"mns/backend/pkg/response"
+	"authkit/internal/domain/entity"
+	"authkit/pkg/response"
 )
 
 // respondError maps domain sentinel errors to HTTP responses.
