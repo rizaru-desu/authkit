@@ -134,7 +134,7 @@ Autentikasi: kirim **cookie** `mns_session` (otomatis di browser) **atau** heade
 
 | Method | Path | Auth | Keterangan |
 |---|---|---|---|
-| POST | `/sign-up/email` | — | Daftar `{ name, email, password, image? }` → `{ token, user }` (auto sign-in) |
+| POST | `/sign-up/email` | — | Daftar `{ name, email, password, image?, autoSignIn? }` → `{ token, user }` (`token` `null` kecuali `autoSignIn:true`) |
 | POST | `/sign-in/email` | — | Login `{ email, password, code?, rememberMe? }` → `{ token, user }` |
 | POST | `/sign-out` | ✅ | Logout |
 | GET | `/get-session` | ✅ | `{ user, session }` |
@@ -217,10 +217,15 @@ Set role user via `POST /api/auth/admin/set-role`.
 ## 🧪 Contoh Penggunaan (curl)
 
 ```bash
-# Sign-up (simpan cookie)
+# Sign-up tanpa auto sign-in (default) → { token: null, user }, tidak ada cookie
+curl -X POST http://localhost:8080/api/auth/sign-up/email \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John","email":"john@example.com","password":"password1234"}'
+
+# Sign-up + langsung login (autoSignIn:true) → set cookie sesi
 curl -X POST http://localhost:8080/api/auth/sign-up/email \
   -H "Content-Type: application/json" -c cookies.txt \
-  -d '{"name":"John","email":"john@example.com","password":"password1234"}'
+  -d '{"name":"John","email":"john@example.com","password":"password1234","autoSignIn":true}'
 
 # Sign-in
 curl -X POST http://localhost:8080/api/auth/sign-in/email \
@@ -244,8 +249,14 @@ export const authClient = createAuthClient({
 });
 
 await authClient.signIn.email({ email, password });
+
+// Sign-up default backend ini TIDAK auto sign-in. Kirim autoSignIn:true
+// jika ingin langsung mendapat sesi (mirip default Better Auth).
+await authClient.signUp.email({ name, email, password, autoSignIn: true });
 ```
 > Catatan: skema DB pakai `snake_case`, jadi map field di config Better Auth frontend (`emailVerified → email_verified`, dst).
+>
+> Default `autoSignIn` backend ini = `false` (beda dari default Better Auth yang `true`). Tanpa `autoSignIn:true`, response `token` = `null` dan user harus sign-in terpisah.
 
 ---
 

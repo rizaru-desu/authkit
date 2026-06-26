@@ -68,12 +68,15 @@ type SignUpInput struct {
 	Password  string
 	Image     *string
 	Role      entity.Role
-	IPAddress *string
-	UserAgent *string
+	// AutoSignIn issues a session right after registration when true.
+	AutoSignIn bool
+	IPAddress  *string
+	UserAgent  *string
 }
 
-// SignUp registers a credential user and immediately issues a session
-// (Better Auth auto sign-in on sign-up).
+// SignUp registers a credential user. A session is issued only when
+// in.AutoSignIn is true and email verification is not required; otherwise it
+// returns a nil session and the caller must sign in separately.
 func (uc *AuthUsecase) SignUp(ctx context.Context, in SignUpInput) (*entity.Session, *entity.User, error) {
 	existing, err := uc.users.GetByEmail(ctx, in.Email)
 	if err != nil && !errors.Is(err, entity.ErrNotFound) {
@@ -122,6 +125,11 @@ func (uc *AuthUsecase) SignUp(ctx context.Context, in SignUpInput) (*entity.Sess
 	// When verification is required, don't auto sign-in; send the email instead.
 	if uc.requireEmailVerification {
 		_ = uc.verification.RequestEmailVerification(ctx, user.Email)
+		return nil, user, nil
+	}
+
+	// Only issue a session when the caller opted into auto sign-in.
+	if !in.AutoSignIn {
 		return nil, user, nil
 	}
 

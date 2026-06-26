@@ -70,11 +70,11 @@ Ada **dua gaya** response:
 # 🔑 Auth — `/api/auth`
 
 ## POST `/sign-up/email`
-Daftar user baru. Auto sign-in (kecuali `REQUIRE_EMAIL_VERIFICATION=true`).
+Daftar user baru. **Tidak** auto sign-in secara default — kirim `autoSignIn: true` untuk langsung mendapat sesi.
 
 **Request**
 ```json
-{ "name": "John", "email": "john@example.com", "password": "password1234", "image": null }
+{ "name": "John", "email": "john@example.com", "password": "password1234", "image": null, "autoSignIn": false }
 ```
 | Field | Tipe | Wajib | Aturan |
 |---|---|---|---|
@@ -82,12 +82,13 @@ Daftar user baru. Auto sign-in (kecuali `REQUIRE_EMAIL_VERIFICATION=true`).
 | email | string | ✅ | format email |
 | password | string | ✅ | 8–128 char |
 | image | string\|null | — | |
+| autoSignIn | boolean | — | default `false`; `true` → langsung dibuatkan sesi + cookie |
 
 **Response 200**
 ```json
 { "token": "8f3a...", "user": { /* User */ } }
 ```
-> Bila `REQUIRE_EMAIL_VERIFICATION=true`: `token` = `null`, email verifikasi dikirim.
+> `token` = `null` (user dibuat tanpa sesi) bila `autoSignIn` tidak `true`, **atau** bila `REQUIRE_EMAIL_VERIFICATION=true` (email verifikasi dikirim). Saat `token` `null`, arahkan user ke `/sign-in/email`.
 
 **Error**: `400 BAD_REQUEST`, `422 USER_ALREADY_EXISTS`
 

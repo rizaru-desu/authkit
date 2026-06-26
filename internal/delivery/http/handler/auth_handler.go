@@ -31,6 +31,9 @@ type signUpRequest struct {
 	Email    string  `json:"email"    binding:"required,email"`
 	Password string  `json:"password" binding:"required,min=8,max=128"`
 	Image    *string `json:"image"`
+	// AutoSignIn issues a session on successful sign-up. Defaults to false
+	// (the client must send true to be signed in immediately).
+	AutoSignIn *bool `json:"autoSignIn"`
 }
 
 type signInRequest struct {
@@ -40,7 +43,8 @@ type signInRequest struct {
 	RememberMe *bool  `json:"rememberMe"` // default true
 }
 
-// SignUpEmail handles POST /auth/sign-up/email (auto signs the user in).
+// SignUpEmail handles POST /auth/sign-up/email. A session is issued only when
+// the request sets autoSignIn:true; otherwise the user is created without one.
 func (h *AuthHandler) SignUpEmail(c *gin.Context) {
 	var req signUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -48,21 +52,27 @@ func (h *AuthHandler) SignUpEmail(c *gin.Context) {
 		return
 	}
 
+	autoSignIn := false
+	if req.AutoSignIn != nil {
+		autoSignIn = *req.AutoSignIn
+	}
+
 	ip, ua := clientMeta(c)
 	session, user, err := h.uc.SignUp(c.Request.Context(), usecase.SignUpInput{
-		Name:      req.Name,
-		Email:     req.Email,
-		Password:  req.Password,
-		Image:     req.Image,
-		IPAddress: ip,
-		UserAgent: ua,
+		Name:       req.Name,
+		Email:      req.Email,
+		Password:   req.Password,
+		Image:      req.Image,
+		AutoSignIn: autoSignIn,
+		IPAddress:  ip,
+		UserAgent:  ua,
 	})
 	if err != nil {
 		authError(c, err)
 		return
 	}
 
-	// With requireEmailVerification, sign-up does not auto sign-in.
+	// No session when autoSignIn is false or email verification is required.
 	if session == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"token": nil,
