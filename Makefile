@@ -1,4 +1,4 @@
-.PHONY: build test lint fmt run clean deps sqlc migrate-up migrate-down help
+.PHONY: build test lint fmt run watch air-install clean deps sqlc migrate-up migrate-down help
 
 BINARY_NAME=mns-backend
 BUILD_DIR=bin
@@ -9,6 +9,16 @@ build:
 
 run:
 	$(GO) run ./cmd/server
+
+watch:
+	@if command -v air >/dev/null 2>&1; then \
+		air; \
+	else \
+		$(GO) run github.com/air-verse/air@latest; \
+	fi
+
+air-install:
+	$(GO) install github.com/air-verse/air@latest
 
 test:
 	$(GO) test -v -race -coverprofile=coverage.out ./...
@@ -45,6 +55,8 @@ help:
 	@echo "Available targets:"
 	@echo "  build         - Build the binary"
 	@echo "  run           - Run the server"
+	@echo "  watch         - Run the server with live reload (air)"
+	@echo "  air-install   - Install the air binary into GOPATH/bin"
 	@echo "  test          - Run tests with race detector"
 	@echo "  test-coverage - Run tests and open HTML coverage"
 	@echo "  lint          - Run golangci-lint"
