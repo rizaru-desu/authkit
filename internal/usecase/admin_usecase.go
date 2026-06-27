@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"authkit/internal/domain/entity"
 	"authkit/internal/domain/repository"
 	"authkit/pkg/access"
@@ -77,7 +75,7 @@ func (uc *AdminUsecase) CreateUser(ctx context.Context, in CreateUserInput) (*en
 		return nil, entity.ErrEmailTaken
 	}
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
+	hashedStr, err := secure.HashPassword(in.Password)
 	if err != nil {
 		return nil, fmt.Errorf("hash password: %w", err)
 	}
@@ -87,7 +85,6 @@ func (uc *AdminUsecase) CreateUser(ctx context.Context, in CreateUserInput) (*en
 	}
 	now := time.Now().UTC()
 	userID := id.New()
-	hashedStr := string(hashed)
 
 	user := &entity.User{
 		ID: userID, Name: in.Name, Email: in.Email, Role: role,
@@ -145,7 +142,7 @@ func (uc *AdminUsecase) SetRole(ctx context.Context, userID string, role entity.
 // SetUserPassword sets a user's credential password, creating the credential
 // account if it does not exist yet (matches Better Auth behaviour).
 func (uc *AdminUsecase) SetUserPassword(ctx context.Context, userID, newPassword string) error {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	hashedStr, err := secure.HashPassword(newPassword)
 	if err != nil {
 		return fmt.Errorf("hash password: %w", err)
 	}
@@ -153,7 +150,6 @@ func (uc *AdminUsecase) SetUserPassword(ctx context.Context, userID, newPassword
 	if err != nil {
 		if errors.Is(err, entity.ErrNotFound) {
 			now := time.Now().UTC()
-			hashedStr := string(hashed)
 			return uc.accounts.Create(ctx, &entity.Account{
 				ID: id.New(), UserID: userID, AccountID: userID,
 				ProviderID: entity.ProviderCredential, Password: &hashedStr,
@@ -162,7 +158,7 @@ func (uc *AdminUsecase) SetUserPassword(ctx context.Context, userID, newPassword
 		}
 		return fmt.Errorf("get credential: %w", err)
 	}
-	return uc.accounts.UpdatePassword(ctx, account.ID, string(hashed))
+	return uc.accounts.UpdatePassword(ctx, account.ID, hashedStr)
 }
 
 // BanUser bans a user and revokes all their sessions. banExpiresIn is seconds

@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"authkit/internal/domain/entity"
 	"authkit/internal/domain/repository"
 	"authkit/pkg/id"
@@ -101,11 +99,11 @@ func (uc *VerificationUsecase) ResetPassword(ctx context.Context, token, newPass
 	if err != nil {
 		return fmt.Errorf("get credential: %w", err)
 	}
-	hashed, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	hashedStr, err := secure.HashPassword(newPassword)
 	if err != nil {
 		return fmt.Errorf("hash password: %w", err)
 	}
-	if err := uc.accounts.UpdatePassword(ctx, account.ID, string(hashed)); err != nil {
+	if err := uc.accounts.UpdatePassword(ctx, account.ID, hashedStr); err != nil {
 		return err
 	}
 	if err := uc.verifications.Delete(ctx, v.ID); err != nil {

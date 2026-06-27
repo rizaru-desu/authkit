@@ -8,8 +8,8 @@ const (
 )
 
 // Account mirrors the Better Auth core `account` table. One user may have many
-// accounts (credential + social providers). For credential accounts the bcrypt
-// hash is stored in Password.
+// accounts (credential + social providers). For credential accounts the
+// argon2id password hash is stored in Password.
 type Account struct {
 	ID                    string
 	UserID                string

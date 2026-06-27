@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"authkit/internal/domain/entity"
 	"authkit/internal/domain/repository"
 	"authkit/pkg/id"
@@ -86,7 +84,7 @@ func (uc *AuthUsecase) SignUp(ctx context.Context, in SignUpInput) (*entity.Sess
 		return nil, nil, entity.ErrEmailTaken
 	}
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.DefaultCost)
+	hashedStr, err := secure.HashPassword(in.Password)
 	if err != nil {
 		return nil, nil, fmt.Errorf("hash password: %w", err)
 	}
@@ -97,7 +95,6 @@ func (uc *AuthUsecase) SignUp(ctx context.Context, in SignUpInput) (*entity.Sess
 	}
 	now := time.Now().UTC()
 	userID := id.New()
-	hashedStr := string(hashed)
 
 	user := &entity.User{
 		ID:            userID,
@@ -293,7 +290,7 @@ func verifyAccountPassword(account *entity.Account, password string) error {
 	if account.Password == nil {
 		return entity.ErrInvalidCredential
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(*account.Password), []byte(password)); err != nil {
+	if err := secure.VerifyPassword(*account.Password, password); err != nil {
 		return entity.ErrInvalidCredential
 	}
 	return nil
